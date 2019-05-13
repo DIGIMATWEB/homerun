@@ -132,14 +132,12 @@ public class BallController : MonoBehaviour {
 
     [HideInInspector]
     public Transform cameraToParent;
+
     float ballAltitudeVAR;
-
-    public static bool FlagAnimator=false;
-    public static bool FlagINtrajectory = false;
-
     public static bool YballH = false;
-    void Start () 
-{
+    public static bool FlagINtrajectory = false;
+    public static bool FlagAnimator = false;
+    void Start () {
         listDotProductToDetectSwing = new List<float>();
 		listPositionBat = new List<Vector3>();
 		listVelocities = new List<float>();
@@ -148,12 +146,11 @@ public class BallController : MonoBehaviour {
 		myRigidbody = GetComponent<Rigidbody>();
 		myTrailRender = ballObject.GetComponent<TrailRenderer>();
 
-        transform.position =new Vector3(-0.2635358f, 1.471837f, -41.60796f);
-        //rangeForDetectCollisionWithBatAndBall = float.Parse (XMLConfiguration.GetSettings()["rangeForDetectCollisionWithBatAndBall"]);
-        //rangeForCollisionWithPerfectReference = float.Parse(XMLConfiguration.GetSettings()["rangeForCollisionWithPerfectReference"]);
-        //rangeYDistanceForGoodHomeRun = float.Parse(XMLConfiguration.GetSettings()["rangeYForGoodHomeRun"]);
+		//rangeForDetectCollisionWithBatAndBall = float.Parse (XMLConfiguration.GetSettings()["rangeForDetectCollisionWithBatAndBall"]);
+		//rangeForCollisionWithPerfectReference = float.Parse(XMLConfiguration.GetSettings()["rangeForCollisionWithPerfectReference"]);
+		//rangeYDistanceForGoodHomeRun = float.Parse(XMLConfiguration.GetSettings()["rangeYForGoodHomeRun"]);
 
-        ActualizarValores();
+		ActualizarValores();
 
 		float scaleBall = float.Parse(XMLConfiguration.GetSettings()["ScaleBall"]);
 		if(scaleBall != 1f)
@@ -163,7 +160,7 @@ public class BallController : MonoBehaviour {
 
 		positionObjectToStartCountingMeters = new Vector2(objectToStartCountingMeters.transform.position.x, objectToStartCountingMeters.transform.position.z);
 
-		objectPerfectReference.SetActive( bool.Parse(XMLConfiguration.GetSettings()["showPerfectBatHitPoint"]));//false de objeto de referencia
+		objectPerfectReference.SetActive( bool.Parse(XMLConfiguration.GetSettings()["showPerfectBatHitPoint"]));
 		use2DDotProduct = bool.Parse(XMLConfiguration.GetSettings()["use2DDotProduct"]);
 
 		//GamePlayMetsHomuRunDerby.myslf.myBatRenderModel.GetComponent<Renderer>().material.color = Color.red;
@@ -172,13 +169,13 @@ public class BallController : MonoBehaviour {
 	}
 	void ActualizarValores()
 	{
-		//DATOS DE VALOR DE RANGO ENTRE BOLA Y BAT PARA GOLPE
+		
 		rangeForDetectCollisionWithBatAndBall = float.Parse (XMLConfiguration.GetSettings()["rangeForDetectCollisionWithBatAndBall"]);
 		rangeForCollisionWithPerfectReference = float.Parse(XMLConfiguration.GetSettings()["rangeForCollisionWithPerfectReference"].Split(',')[ManageData.GetDifficulty()]);
-        rangeYDistanceForGoodHomeRun = float.Parse(XMLConfiguration.GetSettings()["rangeYForGoodHomeRun"].Split(',')[ManageData.GetDifficulty()]);   //obtiene un valor parseado de la dificultad                  //original rangeYDistanceForGoodHomeRun = float.Parse(XMLConfiguration.GetSettings()["rangeYForGoodHomeRun"].Split(',')[ManageData.GetDifficulty()]);
-       // Debug.LogError(rangeYDistanceForGoodHomeRun+"Valorde longYdistance");
-        //Debug.LogError(Mathf.Abs(rangeYDistanceForGoodHomeRun) + "Valorde longYdistance ABS"); no necesario ya que obtenemos un valor float de un char
-        ballAltitudeVAR=float.Parse(XMLConfiguration.GetSettings()["ballAltitude"]);
+		rangeYDistanceForGoodHomeRun = float.Parse(XMLConfiguration.GetSettings()["rangeYForGoodHomeRun"].Split(',')[ManageData.GetDifficulty()]);
+
+        ballAltitudeVAR = float.Parse(XMLConfiguration.GetSettings()["ballAltitude"]);
+
         minVelocityBat = float.Parse(XMLConfiguration.GetSettings()["minVelocityBat"].Split(',')[ManageData.GetDifficulty()]);
 
 		spherePerfectReference.gameObject.SetActive( bool.Parse(XMLConfiguration.GetSettings()["showSpherePerfectReference"]));
@@ -191,8 +188,7 @@ public class BallController : MonoBehaviour {
     }
 	void Update()
 	{
-	
-       // Debug.Log(rangeForDetectCollisionWithBatAndBall+"---------------------------------");
+
 		if(isCountingFeet)
 		{
 			//If it is multiplied by 3.28084f;, means they are feets:
@@ -211,7 +207,7 @@ public class BallController : MonoBehaviour {
 		}
 #endif
 
-		if(bool.Parse(XMLConfiguration.GetSettings()["isDebug"]))//utilized to checj slowli the game
+		if(bool.Parse(XMLConfiguration.GetSettings()["isDebug"]))
 		{
 			if(Input.GetKeyDown(KeyCode.B))
 			{
@@ -293,7 +289,7 @@ public class BallController : MonoBehaviour {
          }*/
         //V3:
 
-        if (checkBallToFixY)///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////??????????????????????????????????????????????????
+        if (checkBallToFixY)
         {
             if (transform.position.z > objectPerfectReference.transform.position.z)
             {
@@ -318,7 +314,7 @@ public class BallController : MonoBehaviour {
                 transform.position = newPos;
             }
         }
-	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////           FIN DEL UPADATE
+	}
     void FixedUpdate()
     {
         //debugMessage.text = (-1f).ToString();
@@ -348,103 +344,101 @@ public class BallController : MonoBehaviour {
 				go2.transform.GetChild(0).GetComponent<TextMesh>().text = Time.time.ToString("F5");
 			}
 		}
-        //Debug.Log("Settings.isAutomaticGamePlay="+Settings.isAutomaticGamePlay+"; ballWasAlreadyHit="+ballWasAlreadyHit);
-        //if(batTransform != null)
-        //	Debug.Log("batTransform="+batTransform.name);
-        //if(extremeBat != null)
-        //	Debug.Log("batTransform="+extremeBat.name);
-        if (!Settings.isAutomaticGamePlay /*&& isBallBeingPlayed*/ && batTransform != null && extremeBat != null && !ballWasAlreadyHit)
-        {
-            //Debug.Log("ADENTRO"+previousTime);
-            if (previousTime == 0 /*&& previousBatPosition == Vector3.zero*/)
-            {
-                //Debug.Log("HERE");
-                previousTime = Time.time;
-                previousBatPosition = extremeBat.transform.position;//////////////////////////////////////////////////posicion del bat que dibuja lineas hacia el bat
-                return;
-            }
+		//Debug.Log("Settings.isAutomaticGamePlay="+Settings.isAutomaticGamePlay+"; ballWasAlreadyHit="+ballWasAlreadyHit);
+		//if(batTransform != null)
+		//	Debug.Log("batTransform="+batTransform.name);
+		//if(extremeBat != null)
+		//	Debug.Log("batTransform="+extremeBat.name);
+		if(!Settings.isAutomaticGamePlay /*&& isBallBeingPlayed*/ && batTransform!=null && extremeBat!=null && !ballWasAlreadyHit)
+		{
+			//Debug.Log("ADENTRO"+previousTime);
+			if(previousTime == 0 /*&& previousBatPosition == Vector3.zero*/)
+			{
+				//Debug.Log("HERE");
+				previousTime = Time.time;
+				previousBatPosition = extremeBat.transform.position;
+				return;
+			}
+				
+			#if UNITY_EDITOR
+			Debug.DrawLine(batTransform.position, extremeBat.transform.position, Color.yellow );
+			Debug.DrawLine(batTransform.position, transform.position, Color.magenta );
+			Debug.DrawLine(batTransform.position, objectPerfectReference.transform.position, Color.cyan );
+			#endif
 
-#if UNITY_EDITOR
-            Debug.DrawLine(batTransform.position, extremeBat.transform.position, Color.yellow);
-            Debug.DrawLine(batTransform.position, transform.position, Color.magenta);
-            Debug.DrawLine(batTransform.position, objectPerfectReference.transform.position, Color.cyan);
+
+			//DUO CAMERA:---------------------------
+			if( bool.Parse(XMLConfiguration.GetSettings()["usoDuoCameraForGamePlay"]))
+			{
+				bool achieveCamera = true;
+				int statusDUO = DUOManager.GetStatusGlobal();
+				if(statusDUO >= 0)
+				{
+					bool isGoingForward = DUOManager.IsGoingForwardGlobal();
+					float speedInCamera = DUOManager.GetSpeedGlobal(ManageData.singleton.newUser.isLefty);
+					
+					//Debug.Log("isGoingForward="+isGoingForward+"; speedInCamera="+speedInCamera);
+					
+					if(speedInCamera < float.Parse(XMLConfiguration.GetSettings()["minSpeedCamera"]))
+						achieveCamera = false;
+					
+					if(!isGoingForward)
+						achieveCamera = false;
+				}
+				else
+				{
+					achieveCamera = false;
+				}
+				
+				//Debug.Log("achieveCamera="+achieveCamera+", statusDUO="+statusDUO);
+				if(!achieveCamera)
+				{
+					#if UNITY_EDITOR
+					SetBatColor(newColor, newColorYOffset);
 #endif
+					return;
+				}
+				
+				
+			}
+			//END DUO CAMERA
 
+			//--------------
+			//OFFSET Y BALL
+			
+			
+			float distanceBallToBatHit = 0;
 
-            //DUO CAMERA:---------------------------
-            if (bool.Parse(XMLConfiguration.GetSettings()["usoDuoCameraForGamePlay"]))
-            {
-                bool achieveCamera = true;
-                int statusDUO = DUOManager.GetStatusGlobal();
-                if (statusDUO >= 0)
-                {
-                    bool isGoingForward = DUOManager.IsGoingForwardGlobal();
-                    float speedInCamera = DUOManager.GetSpeedGlobal(ManageData.singleton.newUser.isLefty);
-
-                    //Debug.Log("isGoingForward="+isGoingForward+"; speedInCamera="+speedInCamera);
-
-                    if (speedInCamera < float.Parse(XMLConfiguration.GetSettings()["minSpeedCamera"]))
-                        achieveCamera = false;
-
-                    if (!isGoingForward)
-                        achieveCamera = false;
-                }
-                else
-                {
-                    achieveCamera = false;
-                }
-
-                //Debug.Log("achieveCamera="+achieveCamera+", statusDUO="+statusDUO);
-                if (!achieveCamera)
-                {
-#if UNITY_EDITOR
-                    SetBatColor(newColor, newColorYOffset);
-#endif
-                    return;
-                }
-
-
-            }
-            //END DUO CAMERA
-
-            //--------------
-            //OFFSET Y BALL
-
-
-            float distanceBallToBatHit = 0;
-            //se puede dejar comentada esta zona del codigo*//////////////////////////////////////////////////////////////                BAT
-            if (!use2DDotProduct)// {
+            if (!use2DDotProduct)
             { distanceBallToBatHit = transform.position.y - GamePlayMetsHomuRunDerby.GetBatCollider().gameObject.transform.position.y; } //POsition from bat to ball.
-                                                                                                                                         //  Debug.LogError(distanceBallToBatHit);}//////////////////////////////////////////////////en este segmento todos los casos entran al else y el valor es de 0
             else
-            { ////////sepueden destruir estas lineas ya que no afectan
-                distanceBallToBatHit = transform.position.y - GamePlayMetsHomuRunDerby.GetBatCollider().gameObject.transform.position.y; //POsition from bat to ball.
-                                                                                                                                         //*************************************************************
-                                                                                                                                       //distanceBallToBatHit = objectPerfectReference.transform.position.y - extremeBat.transform.position.y; //POsition from bat to ball.
+            {    distanceBallToBatHit = objectPerfectReference.transform.position.y - extremeBat.transform.position.y; //POsition from bat to ball.
+
                 if (ballObject.GetComponent<Transform>().position.z > -41.5f)//41,61
                 {
                     //Debug.LogWarning("posicion de inicio ççççççççççççççççççççççççççççççççççççççççççççççç ");
 
-                    FlagAnimator = true;
+               //     FlagAnimator = true;
                     FlagINtrajectory = true;
                 }
-                else if (ballObject.GetComponent<Transform>().position.z < -43.95f && ballObject.GetComponent<Transform>().position.z >-62)// -57.6f )
+                else if (ballObject.GetComponent<Transform>().position.z < -43.95f && ballObject.GetComponent<Transform>().position.z > -62)// -57.6f )
                 {
                     YballH = true;
                 }
-                else if(ballObject.GetComponent<Transform>().position.z < -62) {//-57.78f) {
-                    FlagAnimator = false;
+                else if (ballObject.GetComponent<Transform>().position.z < -62)
+                {//-57.78f) {
+                   // FlagAnimator = false;
                     FlagINtrajectory = false;
                     YballH = false;
-                   // Debug.LogWarning("posicion de HItçççççççççççççççççççççççççççççççççççççççççççççççç");
+                    // Debug.LogWarning("posicion de HItçççççççççççççççççççççççççççççççççççççççççççççççç");
                 }
-             //   Debug.LogError(ballObject.GetComponent<Transform>().position.z + "else++++++++++++++"); Debug.LogError(objectPerfectReference.transform.position.y + "objectperfecRef-------"); Debug.LogError(extremeBat.transform.position.y + "Extremebat///////////");
+
             }
-            if (debugBall){
+			if(debugBall){
 				Debug.Log("transform.position="+transform.position.ToString("F5")+"; GamePlayMetsHomuRunDerby.GetBatCollider().gameObject.transform.position="+GamePlayMetsHomuRunDerby.GetBatCollider().gameObject.transform.position.ToString("F5"));
 				Debug.Log("distanceBallToBatHit="+distanceBallToBatHit +"; rangeYDistanceForGoodHomeRun="+rangeYDistanceForGoodHomeRun);
 			}
-            ////////sepueden destruir estas lineas ya que no afectan*/
+
 			#if UNITY_EDITOR
 			if( Mathf.Abs(distanceBallToBatHit) < rangeYDistanceForGoodHomeRun){
 				newColorYOffset = Color.green;
@@ -564,7 +558,7 @@ public class BallController : MonoBehaviour {
 			}
 			float velocityToUSe = listVelocities[listVelocities.Count-1];
 
-			if(bool.Parse(XMLConfiguration.GetSettings()["useAverageVelocity"]))//no se utiliza en el XMLConfiguration
+			if(bool.Parse(XMLConfiguration.GetSettings()["useAverageVelocity"]))
 			{
 				velocityToUSe = 0;
 				for(int i=15; i<listVelocities.Count; i++)
@@ -581,7 +575,7 @@ public class BallController : MonoBehaviour {
 
 			float multiplierVelocity = 1f;
 
-			if( bool.Parse(XMLConfiguration.GetSettings()["useVelocityForGamePlay"])){                                                                                                          //////////////////////////////
+			if( bool.Parse(XMLConfiguration.GetSettings()["useVelocityForGamePlay"])){
 
 				if(velocityToUSe < minVelocityBat)
 				{
@@ -681,40 +675,37 @@ public class BallController : MonoBehaviour {
 				if(Mathf.Abs(DistanceZ_Ball_PerfectReference) > float.Parse(XMLConfiguration.GetSettings()["distanceBallFromPerfectReference"]))
 				{
 					#if UNITY_EDITOR
-					SetBatColor(newColor, newColorYOffset);//cambios de color
+					SetBatColor(newColor, newColorYOffset);
 #endif
 					return;
 				}
 
-               // Debug.LogWarning(correctSwing +"Variables de Colision" );
 
-                PauseGame();
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //Debug.Log("correctSwing="+correctSwing);
-                Debug.LogWarning(correctSwing + "Variables de Colision");
-                if (correctSwing)
+
+				PauseGame();
+
+				//Debug.Log("correctSwing="+correctSwing);
+				if(correctSwing)
 				{
 					//if(distanceBallToBatHit > rangeYDistanceForGoodHomeRun.x && distanceBallToBatHit < rangeYDistanceForGoodHomeRun.y){
-				    if( Mathf.Abs(distanceBallToBatHit) < rangeYDistanceForGoodHomeRun){
-						Debug.LogWarning(distanceBallToBatHit+"Perfect collision"+ rangeYDistanceForGoodHomeRun);
-                       // Debug.LogError(distanceBallToBatHit);
-                        //Debug.LogError(rangeYDistanceForGoodHomeRun);
-                        //MakeCollisionWithBat( (extremeBat.transform.position - batTransform.position)/2f );
-                        	MakeCollisionWithBat(  batTransform.position, multiplierVelocity );                           /////////////
-                    }///*
-					/*else{
-                        Debug.LogWarning("Not collision");  //MakeCollisionWithBat( (extremeBat.transform.position - batTransform.position)/2f, true, distanceBallToBatHit );
-                        MakeCollisionWithBat( batTransform.position, multiplierVelocity, true, distanceBallToBatHit );
-					}//*/
+					if( Mathf.Abs(distanceBallToBatHit) < rangeYDistanceForGoodHomeRun){
+						Debug.LogWarning("Perfect collision");
+						//MakeCollisionWithBat( (extremeBat.transform.position - batTransform.position)/2f );
+						MakeCollisionWithBat(  batTransform.position, multiplierVelocity );
+					}
+					else{
+						                                                    //MakeCollisionWithBat( (extremeBat.transform.position - batTransform.position)/2f, true, distanceBallToBatHit );
+						MakeCollisionWithBat( batTransform.position, multiplierVelocity, true, distanceBallToBatHit );
+					}
 				}
-				/*else/////don´t affect the code
+				else
 				{
-					//MakeCollisionWithBat( (extremeBat.transform.position - batTransform.position)/2f, true, distanceBallToBatHit );
-					MakeCollisionWithBat( batTransform.position,multiplierVelocity, true, distanceBallToBatHit );//08demayo2019
-				}//estas linas hacen automatico el homerun*/
+					                                                        //MakeCollisionWithBat( (extremeBat.transform.position - batTransform.position)/2f, true, distanceBallToBatHit );
+					MakeCollisionWithBat( batTransform.position,multiplierVelocity, true, distanceBallToBatHit );
+				}
 			}
-            ////////////////////////<<<<<<<<<<<<<<<<<these lines affect directly to ball hits>>>>>>>>>>>>><<<<<<<<<<<<estas lineas afectanel golpe>>>>>>////////////////
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		
 		}
 
 		//Debug.Log("Color final="+newColor + "; newColorYOffset="+newColorYOffset);
@@ -777,7 +768,7 @@ public class BallController : MonoBehaviour {
 	{
 		AudioController.PlaySound(AudioController.SOUNDS.SWING);
 	}
-    
+
 	void StartTrail()
 	{
 		myTrailRender.enabled = true;
@@ -792,13 +783,13 @@ public class BallController : MonoBehaviour {
 
 		//PAra evitar el salto de la animacion:
 		//---NNO volver a usar//transform.position = newPos;
-		float distanceAdd = objectPerfectReference.transform.position.y - transform.position.y - ballAltitudeVAR;                     /////////////////////////////
+		float distanceAdd = objectPerfectReference.transform.position.y - transform.position.y - ballAltitudeVAR; 
         //iTween.MoveAdd(gameObject, iTween.Hash("y", distanceAdd, "time", 1f, "easetype", iTween.EaseType.linear));
         ////iTween.MoveTo(gameObject, iTween.Hash("y", newPos.y, "time", 1f, "easetype", iTween.EaseType.linear, "islocal", true));
-        Debug.Log(distanceAdd + "distanceAdd-----------------------------------------------/////////////////////////////////////////////////-------------------------------------");
+
         deltafix =distanceAdd;
 
-        myRigidbody.isKinematic = false;//la bola ha sido lanzada
+        myRigidbody.isKinematic = false;
         myRigidbody.useGravity = false;
 
 		checkBallToFixY = true;
@@ -810,15 +801,15 @@ public class BallController : MonoBehaviour {
 		//Invoke ("FreezeY", 0.3f);
 
 		if(useRandomX_BallSend)
-            forceToSendBall.x = Random.Range(0.1f, 0.11f);//forceToSendBall.x = Random.Range(0.15f, 0.35f);
+			forceToSendBall.x = Random.Range(0.15f, 0.35f);
 
-
-        forceToSendBall.z = forceXSendBall;// forceToSendBall.z = forceXSendBall;
+        
+        forceToSendBall.z = forceXSendBall;
 
         /*if(invertForceToSendBall)
 			myRigidbody.AddForce(forceToSendBall, typeForce);
 		else*/
-        myRigidbody.AddForce(forceToSendBall,typeForce);
+            myRigidbody.AddForce(forceToSendBall,typeForce);
 
 
 	//	if(GamePlayMetsHomuRunDerby.IsBallForTakePhoto())
@@ -826,30 +817,30 @@ public class BallController : MonoBehaviour {
 		
 		isBallBeingPlayed = true;
 	}
-/*
+
 	void FreezeY()
 	{
-		//myRigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+		myRigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
 
 		/*if(transform.position.y != objectPerfectReference.transform.position.y)
 		{
 			Vector3 newPos = transform.position;
 			newPos.y = objectPerfectReference.transform.position.y;
 			transform.position = newPos;
-		}
-	}*/
-    
+		}*/
+	}
+
 	public void ConfigPositions(PitcherController _pitcher)
 	{
-		parentBall = _pitcher.parentBall;// put the putcher in place and is used for script GameplaysHomeRunDerby
+		parentBall = _pitcher.parentBall;
 		localPositionsStartBall = _pitcher.localPositionsStartBall;
 	}
-    
+
 	public void MakeHomeRun(Vector3 _initialPositionHitBat, float _multiplierVelocity, bool determineYForce, float _yOffset)
 	{
 		//myRigidbody.constraints = RigidbodyConstraints.None;
 		myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        myRigidbody.useGravity = true;                                                                      //labola ha sido golpeada por elo bateada """"""""""""""""""
+        myRigidbody.useGravity = true;
         checkBallToFixY = false;
         StartTrail();
 
@@ -950,21 +941,21 @@ public class BallController : MonoBehaviour {
 		{
 			if(_yOffset > 0){
 				Debug.Log("Original force to up="+forceToMakeHomeRun);
-				forceToMakeHomeRun.x = Random.Range(-5f, 5f);//thise don´t change any value   (-5f, 5f);
-                forceToMakeHomeRun.y += Random.Range(1f, 3f);//forceToMakeHomeRun.y += Random.Range(1f, 3f);// originalvalue (1f, 3f);
-                forceToMakeHomeRun.z = Random.Range(10f, 15f);//(10f, 15f)
-                Debug.Log("Pelota se va hacia arriba");
+				forceToMakeHomeRun.x = Random.Range(-5f, 5f);
+				forceToMakeHomeRun.y += Random.Range(1f, 3f);
+				forceToMakeHomeRun.z = Random.Range(10f, 15f);
+				Debug.Log("Pelota se va hacia arriba");
 			}
 			else
 			{
-				forceToMakeHomeRun.y = Random.Range(-5f, 0);//(-5f,0f)
-                Debug.Log("Pelota se va hacia abajo");
+				forceToMakeHomeRun.y = Random.Range(-5f, 0);
+				Debug.Log("Pelota se va hacia abajo");
 
 				
 				forceToMakeHomeRun = myRigidbody.velocity = forceToMakeBallDown;
-				forceToMakeHomeRun.x = Random.Range(-4f, 4f);//(-4f, 4f)
+				forceToMakeHomeRun.x = Random.Range(-4f, 4f);
 
-            }
+			}
 			AudioController.PlaySound(AudioController.SOUNDS.HIT_FAIL);
 		}
 		else
@@ -984,10 +975,10 @@ public class BallController : MonoBehaviour {
 		Helper.DebugWithColor("_multiplierVelocity="+_multiplierVelocity, Helper.LOG_COLOR.CYAN);
 		forceToMakeHomeRun *= _multiplierVelocity;
 
-        myRigidbody.velocity = Vector3.zero;                         //  controla la fuerza del golpe del bat
+		myRigidbody.velocity = Vector3.zero;
 
 
-        Helper.DebugWithCategory("forceToMakeHomeRun="+forceToMakeHomeRun, Helper.DEBUG_CATEGORY.GOOD_MESSAGE);
+		Helper.DebugWithCategory("forceToMakeHomeRun="+forceToMakeHomeRun, Helper.DEBUG_CATEGORY.GOOD_MESSAGE);
 		//Debug.LogWarning("forceToMakeHomeRun.magnitude="+forceToMakeHomeRun.magnitude);
 		myRigidbody.AddForce(forceToMakeHomeRun,typeForceHomeRun);
 
@@ -1019,8 +1010,7 @@ public class BallController : MonoBehaviour {
 		float randomForceTorque = Random.Range(100f, 400f);
 		ballObject.GetComponent<Rigidbody>().AddTorque(new Vector3(randomForceTorque,randomForceTorque,randomForceTorque));
 	}*/
-	void OnTriggerEnter(Collider other)
-    {
+	void OnTriggerEnter(Collider other) {
 
 		#if DEBUG_FLOW
 		Debug.Log("My object="+gameObject.name+", OnTriggerEnter with="+other.gameObject.name);
@@ -1152,8 +1142,7 @@ public class BallController : MonoBehaviour {
 		AudioController.PlaySound(AudioController.SOUNDS.HORN);
 	}
 
-	void OnCollisionEnter(Collision collision)
-    {
+	void OnCollisionEnter(Collision collision) {
 		Debug.Log("canCollideAgain="+canCollideAgain);
 		if(!canCollideAgain)
 			return;
